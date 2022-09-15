@@ -1,0 +1,67 @@
+@host = http://127.0.0.1:8000/api
+
+GET {{host}}/todo/index HTTP/1.1
+content-type: application/json
+
+########
+GET {{host}}/todo/total-completed HTTP/1.1
+content-type: application/json
+
+
+########
+GET {{host}}/todo/total-incomplete HTTP/1.1
+content-type: application/json
+
+###########
+
+POST  {{host}}/todo/create HTTP/1.1
+content-type: application/json
+
+{
+    "title": "test 2",
+    "note": "test 2 note",
+    "start_date": "20-10-2022",
+    "end_date": "20-10-2022",
+    "start_time": "12:40",
+    "end_time": "13:15"
+}
+
+#########
+
+POST  {{host}}/todo/update HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1,
+    "title": "test 1 update",
+    "note": "test 1 note",
+    "start_date": "20-10-2022"
+    # "end_date": "20-10-2022",
+    # "start_time": "12:40",
+    # "end_time": "13:15"
+}
+
+#####
+POST  {{host}}/todo/delete HTTP/1.1
+content-type: application/json
+
+{
+    "id": 7
+}
+
+#####
+POST  {{host}}/todo/complete HTTP/1.1
+content-type: application/json
+
+{
+    "id": 9
+}
+
+
+#####
+POST  {{host}}/todo/show HTTP/1.1
+content-type: application/json
+
+{
+    "id": 3
+}
