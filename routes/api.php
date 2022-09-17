@@ -30,11 +30,11 @@ Route::group(['prefix' => 'todo'], function () {
     Route::post('update', [TodoController::class, 'update']);
     Route::post('delete', [TodoController::class, 'delete']);
     Route::post('complete', [TodoController::class, 'toggle']);
-
 });
 
 Route::group(['prefix' => 'achievement'], function () {
     Route::get('index', [AchievementController::class, 'index']);
     Route::post('create', [AchievementController::class, 'create']);
+    Route::post('update', [AchievementController::class, 'update']);
     Route::post('delete', [AchievementController::class, 'delete']);
 });

@@ -51,6 +51,40 @@ class AchievementController extends Controller
         }
     }
 
+    //update a achievement
+    public function update(Request $request)
+    {
+        try {
+
+            $validator =  Validator::make($request->all(), [
+                'id' => 'required|integer'
+            ]);
+            if ($validator->fails()) return BaseController::error($validator->errors()->first(), $validator->errors());
+
+            // validate if request limit is less then existing assigned count
+            $achievement = Achievement::find($request->id);
+            if ($achievement->assigned_count > $request->limit) {
+                return BaseController::error('Limit can not be decreased. It is already assigned to some todo.');
+            }
+
+            $achievement = Achievement::where('id', $request->id)->first();
+            if (!$achievement) return BaseController::error('Achievement not found');
+            $achievement->title = isset($request->title) ? $request->title : $achievement->title;
+            $achievement->description = isset($request->note) ? $request->description : $achievement->description;
+            $achievement->points = isset($request->points) ? $request->points : $achievement->points;
+            $achievement->limit = isset($request->limit) ? $request->limit : $achievement->limit;
+
+
+            $achievement->save();
+            $allAchievement = Achievement::all();
+
+            return BaseController::success('Achievement updated successfully', $allAchievement);
+        } catch (Exception $e) {
+            return $e;
+            return BaseController::error('Something went wrong.');
+        }
+    }
+
     //delete a achievement
     public function delete(Request $request)
     {

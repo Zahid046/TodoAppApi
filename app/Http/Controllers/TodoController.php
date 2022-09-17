@@ -51,6 +51,13 @@ class TodoController extends Controller
                     $achievement->increment('assigned_count');
                     $isAssign = 1;
                     $todo->achievement_id = $achievement->id;
+
+                    if ($achievement->completed_count == $achievement->assigned_count) {
+                        $achievement->is_unlocked = 1;
+                    } else {
+                        $achievement->is_unlocked = 0;
+                    }
+                    $achievement->save();
                     break;
                 }
             }

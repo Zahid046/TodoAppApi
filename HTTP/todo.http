@@ -18,7 +18,7 @@ POST  {{host}}/todo/create HTTP/1.1
 content-type: application/json
 
 {
-    "title": "task 14",
+    "title": "task 15",
     "note": "test 2 note",
     "start_date": "20-10-2022",
     "end_date": "20-10-2022",
@@ -54,7 +54,7 @@ POST  {{host}}/todo/complete HTTP/1.1
 content-type: application/json
 
 {
-    "id": 13
+    "id": 4
 }
 
 
@@ -84,6 +84,16 @@ content-type: application/json
     "limit":3
 }
 
+
+###########
+
+POST  {{host}}/achievement/update HTTP/1.1
+content-type: application/json
+
+{
+    "id":1,
+    "limit":6
+}
 
 ###########
 
