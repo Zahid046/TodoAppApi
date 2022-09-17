@@ -18,7 +18,7 @@ POST  {{host}}/todo/create HTTP/1.1
 content-type: application/json
 
 {
-    "title": "test 2",
+    "title": "task 14",
     "note": "test 2 note",
     "start_date": "20-10-2022",
     "end_date": "20-10-2022",
@@ -46,7 +46,7 @@ POST  {{host}}/todo/delete HTTP/1.1
 content-type: application/json
 
 {
-    "id": 7
+    "id": 13
 }
 
 #####
@@ -54,7 +54,7 @@ POST  {{host}}/todo/complete HTTP/1.1
 content-type: application/json
 
 {
-    "id": 9
+    "id": 13
 }
 
 
@@ -63,5 +63,33 @@ POST  {{host}}/todo/show HTTP/1.1
 content-type: application/json
 
 {
-    "id": 3
+    "id": 10
+}
+
+
+######
+
+GET {{host}}/achievement/index HTTP/1.1
+content-type: application/json
+
+
+###########
+
+POST  {{host}}/achievement/create HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Level 3",
+    "points":25,
+    "limit":3
+}
+
+
+###########
+
+POST  {{host}}/achievement/delete HTTP/1.1
+content-type: application/json
+
+{
+    "id":3
 }

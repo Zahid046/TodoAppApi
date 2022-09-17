@@ -17,11 +17,15 @@ return new class extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->text('note')->nullable();
-            $table->time('start_date')->nullable();
+            $table->date('start_date')->nullable();
             $table->time('start_time')->nullable();
             $table->date('end_date')->nullable();
             $table->time('end_time')->nullable();
             $table->boolean('is_completed')->default(false);
+
+            $table->foreignId('achievement_id')->nullable()
+                ->constrained('achievements')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

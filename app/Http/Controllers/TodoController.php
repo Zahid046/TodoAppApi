@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Achievement;
 use App\Models\Todo;
 use Carbon\Carbon;
 use Exception;
@@ -16,26 +17,7 @@ class TodoController extends Controller
             $allTodo = Todo::all();
             return BaseController::success('All todo list', $allTodo);
         } catch (Exception $e) {
-            return BaseController::error('Something went wrong.');
-        }
-    }
-
-    public function totalCompleted()
-    {
-        try {
-            $totalCompleted = Todo::where('is_completed', 1)->count();
-            return BaseController::success('Total completed todo', $totalCompleted);
-        } catch (Exception $e) {
-            return BaseController::error('Something went wrong.');
-        }
-    }
-
-    public function totalIncomplete()
-    {
-        try {
-            $totalIncomplete = Todo::where('is_completed', 0)->count();
-            return BaseController::success('Total incomplete todo', $totalIncomplete);
-        } catch (Exception $e) {
+            return $e;
             return BaseController::error('Something went wrong.');
         }
     }
@@ -60,6 +42,22 @@ class TodoController extends Controller
             $todo->end_date =  Carbon::parse($request->end_date)->format('Y-m-d');
             $todo->start_time =  Carbon::parse($request->start_time)->format('H:i');
             $todo->end_time =  Carbon::parse($request->end_time)->format('H:i');
+
+
+            $allAchievement = Achievement::all();
+            $isAssign = 0;
+            foreach ($allAchievement as $achievement) {
+                if ($achievement->assigned_count < $achievement->limit) {
+                    $achievement->increment('assigned_count');
+                    $isAssign = 1;
+                    $todo->achievement_id = $achievement->id;
+                    break;
+                }
+            }
+            if ($isAssign == 0) {
+                $todo->achievement_id = null;
+            }
+
 
             $todo->save();
             $allTodo = Todo::all();
@@ -93,6 +91,7 @@ class TodoController extends Controller
             $allTodo = Todo::all();
             return BaseController::success('Updated successfully', $allTodo);
         } catch (Exception $e) {
+            return $e;
             return BaseController::error('Something went wrong.');
         }
     }
@@ -109,11 +108,24 @@ class TodoController extends Controller
             $todo = Todo::find($request->id);
             if (!$todo) return BaseController::error('Todo not found');
 
+
+            if ($todo->achievement_id != null) {
+                $achievement = Achievement::find($todo->achievement_id);
+                $achievement->decrement('assigned_count');
+                $achievement->decrement('completed_count');
+                if ($achievement->assigned_count > 0 && $achievement->completed_count == $achievement->assigned_count) {
+                    $achievement->is_unlocked = 1;
+                } else {
+                    $achievement->is_unlocked = 0;
+                }
+                $achievement->save();
+            }
+
             $todo->delete();
             $allTodo = Todo::all();
             return BaseController::success('Deleted successfully', $allTodo);
         } catch (Exception $e) {
-
+            return $e;
             return BaseController::error('Something went wrong.');
         }
     }
@@ -131,9 +143,19 @@ class TodoController extends Controller
             if (!$todo) return BaseController::error('Todo not found');
 
             $todo->is_completed = $todo->is_completed ? 0 : 1;
+            $achievement = Achievement::find($todo->achievement_id);
+            $todo->is_completed ? $achievement->increment('completed_count') : $achievement->decrement('completed_count');
+            if ($achievement->completed_count == $achievement->assigned_count) {
+                $achievement->is_unlocked = 1;
+            } else {
+                $achievement->is_unlocked = 0;
+            }
+            $achievement->save();
+
             $todo->save();
             return $todo->is_completed ? BaseController::success('Todo marked as complete', $todo) : BaseController::success('Todo marked as incomplete', $todo);
         } catch (Exception $e) {
+            return $e;
             return BaseController::error('Something went wrong.');
         }
     }
@@ -152,6 +174,35 @@ class TodoController extends Controller
 
             return BaseController::success('Todo details', $todo);
         } catch (Exception $e) {
+            return $e;
+            return BaseController::error('Something went wrong.');
+        }
+    }
+
+    public function totalCompleted()
+    {
+        try {
+            $totalCompleted = Todo::where('is_completed', 1)->count();
+            $data = [
+                'total_completed' => $totalCompleted
+            ];
+            return BaseController::success('Total completed todo', $data);
+        } catch (Exception $e) {
+            return $e;
+            return BaseController::error('Something went wrong.');
+        }
+    }
+
+    public function totalIncomplete()
+    {
+        try {
+            $totalIncomplete = Todo::where('is_completed', 0)->count();
+            $data = [
+                'total_incomplete' => $totalIncomplete
+            ];
+            return BaseController::success('Total incomplete todo', $data);
+        } catch (Exception $e) {
+            return $e;
             return BaseController::error('Something went wrong.');
         }
     }

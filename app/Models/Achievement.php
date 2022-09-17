@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Todo extends Model
+class Achievement extends Model
 {
     use HasFactory;
 
-    public function achievement()
-    {
-        return $this->belongsTo(Achievement::class);
+    public function todos(){
+        return $this->hasMany(Todo::class, 'achievement_id');
     }
 }

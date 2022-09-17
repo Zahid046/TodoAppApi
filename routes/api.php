@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AchievementController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TodoController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +31,10 @@ Route::group(['prefix' => 'todo'], function () {
     Route::post('delete', [TodoController::class, 'delete']);
     Route::post('complete', [TodoController::class, 'toggle']);
 
+});
+
+Route::group(['prefix' => 'achievement'], function () {
+    Route::get('index', [AchievementController::class, 'index']);
+    Route::post('create', [AchievementController::class, 'create']);
+    Route::post('delete', [AchievementController::class, 'delete']);
 });
