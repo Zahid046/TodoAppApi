@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Achievement;
+use App\Models\Todo;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -99,6 +100,28 @@ class AchievementController extends Controller
                 $achievement->delete();
                 $allAchievement = Achievement::all();
                 return BaseController::success('Achievement deleted successfully', $allAchievement);
+            } else {
+                return BaseController::error('Achievement not found');
+            }
+        } catch (Exception $e) {
+            return $e;
+            return BaseController::error('Something went wrong.');
+        }
+    }
+
+    public function show(Request $request)
+    {
+        try {
+
+            $validator =  Validator::make($request->all(), [
+                'id' => 'required|integer'
+            ]);
+            if ($validator->fails()) return BaseController::error($validator->errors()->first(), $validator->errors());
+            $achievement = Achievement::find($request->id);
+            $tasks = Todo::where('achievement_id', $request->id)->get();
+            if ($achievement) {
+                $achievement['tasks'] = $tasks;
+                return BaseController::success('Achievement found', $achievement);
             } else {
                 return BaseController::error('Achievement not found');
             }

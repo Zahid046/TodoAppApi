@@ -23,9 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'todo'], function () {
     Route::get('index', [TodoController::class, 'index']);
-    Route::post('show', [TodoController::class, 'show']);
-    Route::get('total-completed', [TodoController::class, 'totalCompleted']);
-    Route::get('total-incomplete', [TodoController::class, 'totalIncomplete']);
     Route::post('create', [TodoController::class, 'create']);
     Route::post('update', [TodoController::class, 'update']);
     Route::post('delete', [TodoController::class, 'delete']);
@@ -34,6 +31,7 @@ Route::group(['prefix' => 'todo'], function () {
 
 Route::group(['prefix' => 'achievement'], function () {
     Route::get('index', [AchievementController::class, 'index']);
+    Route::post('show', [AchievementController::class, 'show']);
     Route::post('create', [AchievementController::class, 'create']);
     Route::post('update', [AchievementController::class, 'update']);
     Route::post('delete', [AchievementController::class, 'delete']);

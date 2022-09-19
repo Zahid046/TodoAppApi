@@ -160,54 +160,8 @@ class TodoController extends Controller
             $achievement->save();
 
             $todo->save();
-            return $todo->is_completed ? BaseController::success('Todo marked as complete', $todo) : BaseController::success('Todo marked as incomplete', $todo);
-        } catch (Exception $e) {
-            return $e;
-            return BaseController::error('Something went wrong.');
-        }
-    }
-
-    public function show(Request $request)
-    {
-        try {
-
-            $validator =  Validator::make($request->all(), [
-                'id' => 'required|integer'
-            ]);
-            if ($validator->fails()) return BaseController::error($validator->errors()->first(), $validator->errors());
-
-            $todo = Todo::find($request->id);
-            if (!$todo) return BaseController::error('Todo not found');
-
-            return BaseController::success('Todo details', $todo);
-        } catch (Exception $e) {
-            return $e;
-            return BaseController::error('Something went wrong.');
-        }
-    }
-
-    public function totalCompleted()
-    {
-        try {
-            $totalCompleted = Todo::where('is_completed', 1)->count();
-            $data = [
-                'total_completed' => $totalCompleted
-            ];
-            return BaseController::success('Total completed todo', $data);
-        } catch (Exception $e) {
-            return $e;
-            return BaseController::error('Something went wrong.');
-        }
-    }
-
-    public function totalIncomplete()
-    {
-        try {
-            $totalIncomplete = Todo::where('is_completed', 0)->count();
-            $data = [
-                'total_incomplete' => $totalIncomplete
-            ];
-            return BaseController::success('Total incomplete todo', $data);
+            $allTodo = Todo::all();
+            return $todo->is_completed ? BaseController::success('Todo marked as complete', $allTodo) : BaseController::success('Todo marked as incomplete', $allTodo);
         } catch (Exception $e) {
             return $e;
             return BaseController::error('Something went wrong.');

@@ -1,15 +1,7 @@
-@host = http://127.0.0.1:8000/api
+# @host = http://127.0.0.1:8000/api
+@host = http://192.168.31.19:8000/api
 
 GET {{host}}/todo/index HTTP/1.1
-content-type: application/json
-
-########
-GET {{host}}/todo/total-completed HTTP/1.1
-content-type: application/json
-
-
-########
-GET {{host}}/todo/total-incomplete HTTP/1.1
 content-type: application/json
 
 ###########
@@ -58,15 +50,6 @@ content-type: application/json
 }
 
 
-#####
-POST  {{host}}/todo/show HTTP/1.1
-content-type: application/json
-
-{
-    "id": 10
-}
-
-
 ######
 
 GET {{host}}/achievement/index HTTP/1.1
@@ -102,4 +85,14 @@ content-type: application/json
 
 {
     "id":3
+}
+
+
+###########
+
+POST  {{host}}/achievement/show HTTP/1.1
+content-type: application/json
+
+{
+    "id":2
 }
